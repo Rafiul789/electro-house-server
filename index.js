@@ -15,7 +15,16 @@ async function run(){
 try{
 
     await client.connect();
-    console.log('database connected')
+    const productsCollection=client.db('electro_house').collection('products');
+
+    app.get('/product',async(req,res)=>{
+const query={};
+const cursor=productsCollection.find(query)
+const product=await cursor.toArray()
+res.send(product);
+
+    })
+
 
 }finally{
 
