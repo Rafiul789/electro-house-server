@@ -16,6 +16,7 @@ try{
 
     await client.connect();
     const productsCollection=client.db('electro_house').collection('products');
+    const orderCollection=client.db('electro_house').collection('orders');
 
     app.get('/product',async(req,res)=>{
 const query={};
@@ -31,6 +32,17 @@ res.send(product);
         const product = await productsCollection.findOne(query);
         res.send(product);
     });
+
+    app.post('/order',async(req,res) =>{
+
+const order=req.body;
+const result=orderCollection.insertOne(order);
+res.send(result)
+
+    })
+
+
+    
 
 
 }finally{
