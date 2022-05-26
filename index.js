@@ -36,6 +36,8 @@ res.send(product);
         res.send(product);
     });
 
+    
+
     app.post('/order',async(req,res) =>{
 
 const order=req.body;
@@ -48,6 +50,11 @@ if(exists){
 const result= await orderCollection.insertOne(order);
 res.send({success:true,result})
 
+    })
+
+    app.get('/user',async(req,res)=>{
+      const users=await userCollection.find().toArray();
+      res.send(users)
     })
 
 
@@ -63,15 +70,8 @@ res.send({success:true,result})
     const token=jwt.sign({email:email},process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '172h' })
     res.send({result,accessToken:token})
     })
-app.get('/order/:id', async(req,res)=>{
-  const id = req.params.id;
-  const query={_id: ObjectId(id)};
-  const product = await orderCollection.findOne(query);
-  res.send(product);
 
-
-}
-    
+  
 
 
 }finally{
