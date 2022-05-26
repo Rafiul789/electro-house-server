@@ -17,6 +17,7 @@ try{
     await client.connect();
     const productsCollection=client.db('electro_house').collection('products');
     const orderCollection=client.db('electro_house').collection('orders');
+    const userCollection=client.db('electro_house').collection('users')
 
     app.get('/product',async(req,res)=>{
 const query={};
@@ -47,6 +48,18 @@ res.send({success:true,result})
 
     })
 
+
+    app.put('/user/:email',async(req,res)=>{
+     const email=req.params.email;
+     const user=req.body;
+     const filter={email:email};
+     const options={upsert:true};
+     const updateDoc = {
+      $set:user,
+    };
+    const result = await userCollection.updateOne(filter, updateDoc, options);
+    res.send(result)
+    })
 
     
 
