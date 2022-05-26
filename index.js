@@ -36,8 +36,14 @@ res.send(product);
     app.post('/order',async(req,res) =>{
 
 const order=req.body;
-const result=orderCollection.insertOne(order);
-res.send(result)
+const query={order:order.name,customerName:order.customerName
+}
+const exists= await orderCollection.findOne(query);
+if(exists){
+  return res.send({success:false,order:exists})
+}
+const result= await orderCollection.insertOne(order);
+res.send({success:true,result})
 
     })
 
