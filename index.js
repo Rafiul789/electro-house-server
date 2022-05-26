@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require( 'cors');
+var jwt = require('jsonwebtoken');
+
 require('dotenv').config();
 const { MongoClient, ServerApiVersion,ObjectId } = require('mongodb');
 const app = express();
@@ -58,7 +60,8 @@ res.send({success:true,result})
       $set:user,
     };
     const result = await userCollection.updateOne(filter, updateDoc, options);
-    res.send(result)
+    const token=jwt.sign({email:email},process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '172h' })
+    res.send({result,accessToken:token})
     })
 
     
