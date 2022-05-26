@@ -36,7 +36,10 @@ res.send(product);
         res.send(product);
     });
 
-    
+    app.get('/order',async(req,res)=>{
+      const orders=await orderCollection.find().toArray();
+      res.send(orders)
+    })
 
     app.post('/order',async(req,res) =>{
 
