@@ -20,7 +20,8 @@ try{
     const productsCollection=client.db('electro_house').collection('products');
     const orderCollection=client.db('electro_house').collection('orders');
     const userCollection=client.db('electro_house').collection('users')
-
+    const reviewCollection = client.db('electro_house').collection('review');
+   
     app.get('/product',async(req,res)=>{
 const query={};
 const cursor=productsCollection.find(query)
@@ -59,7 +60,17 @@ res.send({success:true,result})
       const users=await userCollection.find().toArray();
       res.send(users)
     })
-
+    app.put('/user/admin/:email',async(req,res)=>{
+      const email=req.params.email;
+     
+      const filter={email:email}
+     
+      const updateDoc = {
+       $set:{role:'admin'},
+     };
+     const result = await userCollection.updateOne(filter, updateDoc);
+     res.send(result)
+     })
 
     app.put('/user/:email',async(req,res)=>{
      const email=req.params.email;
@@ -74,7 +85,16 @@ res.send({success:true,result})
     res.send({result,accessToken:token})
     })
 
-  
+    app.post('/review', async(req, res) =>{
+      const newReview = req.body;
+      console.log(newReview)
+      const result = await reviewCollection.insertOne(newReview);
+      res.send(result);
+  });
+  app.get('/review',async(req,res)=>{
+    const reviews=await reviewCollection.find().toArray();
+    res.send(reviews)
+  })
 
 
 }finally{
